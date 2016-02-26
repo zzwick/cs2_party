@@ -1,8 +1,9 @@
 import Employee
 import Data.Tree
 
+main = print("hello")
 glCons :: Employee -> GuestList -> GuestList
-glCons (Emp n fundiv) (GL olde fun) = GL (n ++ olde) (fun+fundiv)
+glCons dude@(Emp n fundiv) (GL olde fun) = GL (dude : olde) (fun+fundiv)
 
 instance Monoid GuestList where
 	mempty = GL [] 0
@@ -13,8 +14,11 @@ moreFun (GL ex x) (GL ey y) = if x >= y
 							then (GL ex x)
 							else (GL ey y)
 
---treeFold :: (a->b->b) -> Tree a -> b
+treeFold :: (a->[b]->b) -> b -> Tree a -> b
+treeFold f b (Node a c) = f (b ++ (a : treeFold c))
 
+treeFold2 :: (Employee -> [GuestList] -> GuestList) -> GuestList -> Tree Employee -> GuestList
+treeFold2 
 --findBottom :: Tree GuestList -> [GuestList] -> [GuestList]
 --findBottom (Node (a) []) b = a : b
 --findBottom (Node (a) (c))) b = fmap findBottom ((c) (b))
@@ -29,6 +33,7 @@ combineToUnder :: [GuestList] -> GuestList
 combineToUnder a = foldr (mappend) mempty a
 
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel bob@(Emp b f) (x) = ((glCons bob (foldr mappend (map fst x) [])), (glCons foldr mappend (map snd x) []))
+nextLevel bob@(Emp b f) (x) = ((glCons bob (foldr mappend (GL [] 0) (map fst x))), (foldr mappend (GL [] 0) (map snd x)))
 
---maxFun :: Tree Employee -> GuestList
+maxFun :: Tree Employee -> GuestList
+maxFun 
